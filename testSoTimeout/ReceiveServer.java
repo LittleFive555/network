@@ -10,6 +10,7 @@ public class ReceiveServer {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] buff = new byte[1024];
 		int len = -1;
+		//test git subdir
 		do {
 			try {
 				len = in.read(buff);
