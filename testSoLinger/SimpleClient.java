@@ -2,10 +2,10 @@ import java.io.*;
 import java.net.*;
 
 public class SimpleClient{
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		Socket s = new Socket("localhost", 8000);
 		// s.setSoLinger(true, 0);				//关闭Socket以后，底层Socket立即关闭				
-		// s.setSoLinger(true, 3600);			//关闭Socket以后，底层Socket延迟3600秒再关闭
+		s.setSoLinger(true, 3600);			//关闭Socket以后，底层Socket延迟3600秒（或发送完数据）再关闭
 		OutputStream out = s.getOutputStream();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < 10000; i++) {
