@@ -1,9 +1,23 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/* ServerSocket有以下几个选项: 
+   SO_TIMEOUT: 表示等待客户连接的超时时间
+			serverSocket.setSoTimeout(int mills), 默认为0, 表示永远不会超时
+   SO_REUSEADDR: 表示是否允许重用服务器所绑定的地址, 与Socket的相同, 必须在还未绑定到本地端口之前就设置
+			serverSocket.setReuseAddress(boolean on)
+   SO_RCVBUF: 表示接收数据的缓冲区的大小
+			serverSocket.setReceiveBufferSize(int size)
+			绑定端口前后设置都有效, 例外情况下是如果要设置大于64KB的缓冲区, 则必须要在绑定端口钱设置才有效.
+   PerformancePreferences: 与Socket的相同
+ */
 public class EchoServer {
-	//如果port = 0, 表示由操作系统来分配一个任意可用的端口, 也称为匿名端口
+	/* 如果port = 0, 表示由操作系统来分配一个任意可用的端口, 也称为匿名端口
+	   FTP就使用的是匿名端口.FTP使用两个并行的TCP连接: 一个是控制连接, 一个是数据连接.
+			控制连接: 用于在客户和服务器之间发送控制信息, 如用户名和口令, 改变远程目录的命令或上传和下载文件的命令.
+			数据连接: 用于传送文件
+	   TCP服务器在21端口上监听控制连接, 如果有客户要求上传或下载文件, 就另外建立一个数据连接, 通过它来传送文件.
+	 */
 	private int port = 8000;
 	private ServerSocket serverSocket;
 	/*该项一般由操作系统限定为50, 以下三种情况会使用操作系统限定的最大长度:
@@ -26,6 +40,9 @@ public class EchoServer {
 		// serverSocket = new ServerSocket();
 		// serverSocket.setReuseAddress(true);
 		// serverSocket.bind(new InetSocketAddress(8000));
+		
+		//如果要确定一个ServerSocket已经与特定端口绑定,并且还没有被关闭,则可以采用以下方式:
+		// boolean isOpen = serverSocket.isBound() && !serverSocket.isClosed();
 		
 		System.out.println("服务器启动");
 	}
