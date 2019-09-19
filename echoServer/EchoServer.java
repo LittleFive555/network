@@ -3,15 +3,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
+	//如果port = 0, 表示由操作系统来分配一个任意可用的端口, 也称为匿名端口
 	private int port = 8000;
 	private ServerSocket serverSocket;
+	/*该项一般由操作系统限定为50, 以下三种情况会使用操作系统限定的最大长度
+		backlog > 操作系统限定的队列的最大长度
+		backlog <= 0
+		在ServerSocket的构造方法中没有设置backlog参数 
+	 */
 	private int maxConnectNum = 2;
 	
 	public EchoServer() throws IOException {
 		/*
 		 * ServerSocket的构造方法负责在操作系统中把当前进程注册为服务器进程。
 		 */
-		serverSocket = new ServerSocket(port, maxConnectNum);	//监听8000端口，第二个参数为连接请求队列的长度
+		serverSocket = new ServerSocket(port, maxConnectNum);	//监听8000端口，第二个参数 backlog 为连接请求队列的长度
 		System.out.println("服务器启动");
 	}
 	
