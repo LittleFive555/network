@@ -1,3 +1,5 @@
+package multiThreadServer;
+
 import java.util.LinkedList;
 
 public class ThreadPool extends ThreadGroup {
@@ -8,14 +10,17 @@ public class ThreadPool extends ThreadGroup {
 	
 	public ThreadPool(int poolSize) {					//poolSize 指定线程池中的工作线程的数目
 		super("ThreadPool-" + (threadPoolID++));
+		/* setDaemon 设定线程组的守护程序状态
+		   守护进程线程组----最后一个线程停止或最后一个线程被销毁时自动销毁
+		 */		
 		setDaemon(true);
 		workQueue = new LinkedList<Runnable>();			//创建工作队列
 		for (int i = 0; i < poolSize; i++)
 			new WorkThread().start();					//创建并启动工作线程
 	}
 	
-	/** 向工作队列中加入一个新任务, 由工作线程去执行该任务 */
 	//synchronized 表示这个方法加锁, 不管哪个线程, 运行到这个方法时, 都要检查有没有其他线程在进行这个方法, 有的话要等该进程运行完再运行
+	/** 向工作队列中加入一个新任务, 由工作线程去执行该任务 */
 	public synchronized void execute(Runnable task) {
 		if (isClosed) {									//线程池被关闭 则抛出 IllegalStateException 异常
 			throw new IllegalStateException();
@@ -96,13 +101,12 @@ public class ThreadPool extends ThreadGroup {
 		}
 		
 		public void run() {
-			while (isInterrupted()) {			//isInterrupted()方法继承自Thread类, 判断线程是否被中断
+			while (!isInterrupted()) {			//isInterrupted()方法继承自Thread类, 判断线程是否被中断
 				//继承了Runnable接口的task
 				Runnable task = null;
 				try {							//取出任务
 					task = getTask();
 				} catch (InterruptedException ex) {}
-				
 				//如果getTask()返回null 或者 线程执行getTask()时被中断, 则结束此线程
 				if (task == null)
 					return;
