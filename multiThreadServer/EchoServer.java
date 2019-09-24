@@ -2,17 +2,28 @@ package multiThreadServer;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 
 public class EchoServer {
 	private int port = 8000;
 	private ServerSocket serverSocket;
-	private ThreadPool threadPool;
+	
+	//自定义的线程池
+	// private ThreadPool threadPool;
+	//JDK类库的线程池
+	private ExecutorService executorService;
+	
 	private final int POOL_SIZE = 4;
 	
 	public EchoServer() throws IOException {
 		serverSocket = new ServerSocket(port);
+		
+		//自定义的线程池
 		//Runtime 的 availableProcessors() 方法返回当前系统的CPU的数目
-		threadPool = new ThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+		// threadPool = new ThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+		//JDK类库的线程池
+		executorService = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+		
 		
 		System.out.println("服务器启动成功");
 	}
@@ -22,7 +33,12 @@ public class EchoServer {
 			Socket socket = null;
 			try {
 				socket = serverSocket.accept();
-				threadPool.execute(new Handler(socket));
+				
+				//自定义的线程池
+				// threadPool.execute(new Handler(socket));
+				//JDK类库的线程池
+				executorService.execute(new Handler(socket));
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
