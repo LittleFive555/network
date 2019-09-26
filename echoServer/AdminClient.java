@@ -23,8 +23,6 @@ public class AdminClient {
 				System.out.println(msg);
 			}
 		} catch (IOException e) {
-			//这有问题
-			System.out.println("这有问题???");
 			e.printStackTrace();
 		} finally {
 			try {
