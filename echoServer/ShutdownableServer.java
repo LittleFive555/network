@@ -36,10 +36,17 @@ class ShutdownableServer {
 						while(!executorService.isTerminated())
 							executorService.awaitTermination(30, TimeUnit.SECONDS);
 						
-						serverSocket.close();			//关闭与Client客户通信的ServerSocket
+						//如果此处关闭serverSocket, 会导致socketForShutdown报错:
+						//		java.net.SocketException: Connection reset
+						//管理员客户接收不到服务器关闭的回应
+						//所以将关闭serverSocket放到发送关闭信息后  即49行
+						// serverSocket.close();
+						
 						long endTime = System.currentTimeMillis();
 						socketForShutdown.getOutputStream().write(("服务器已经关闭, " + 
 								"关闭服务器用了 " + (endTime - beginTime) + "毫秒\r\n").getBytes());
+								
+						serverSocket.close();			//关闭与Client客户通信的ServerSocket
 						socketForShutdown.close();
 						serverSocketForShutdown.close();
 					}
