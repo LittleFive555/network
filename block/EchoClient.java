@@ -17,6 +17,8 @@ public class EchoClient {
 		InetSocketAddress isaddr = new InetSocketAddress(addr, port);
 		//方法2
 		// InetSocketAddress isaddr = new InetSocketAddress(host, port);
+		
+		//使用connect()方法连接远程服务器, 该方法在阻塞模式下运行时, 等到与远程服务器的连接建立成功才返回
 		socketChannel.connect(isaddr);
 		System.out.println("与服务器连接成功");
 	}

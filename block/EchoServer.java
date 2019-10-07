@@ -95,7 +95,7 @@ class Handler implements Runnable{
 		return new PrintWriter(socketOut, true);
 	}
 	private String echo(String msg) {
-		return "Echo:" + msg;
+		return "echo:" + msg;
 	}
 	
 	//此为根据socketChannel的read()方法构建的readLine()方法
