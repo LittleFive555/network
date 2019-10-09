@@ -91,7 +91,7 @@ public class EchoClient {
 		synchronized(sendBuffer) {
 			sendBuffer.flip();			//把极限设为位置, 把位置设为零
 			socketChannel.write(sendBuffer);
-			sendBuffer.compact();		//删除已发送的数据
+			sendBuffer.compact();		//位置到极限, 极限到容量, 删除已发送的数据
 		}
 	}
 	
